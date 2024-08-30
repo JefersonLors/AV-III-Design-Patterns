@@ -2,22 +2,25 @@ import java.time.LocalDate;
 
 import model.Arquivo;
 import model.Credencial;
-import model.Entrada;
 import model.EntradaOperavel;
-import model.Pasta;
+import model.resources.EstadoArquivo;
 import model.resources.TipoArquivo;
+import model.state.AbstractArquivoState;
 
 public class App {
-	
-	
-	public void runQ1() throws IllegalAccessException  {
-		
+	public void runQ1() throws Exception  {
 		Credencial user01 = new Credencial("user01");
 		
-		EntradaOperavel a1 = new Arquivo(TipoArquivo.BINARIO, "A1", LocalDate.now(), "1");
-		System.out.println(a1.ler(user01));
-		System.out.println(a1.dump());
+		Arquivo a1 = new Arquivo(TipoArquivo.BINARIO, "A1", LocalDate.now(), "Oi", EstadoArquivo.NORMAL);
+		System.out.println("lendo: " + a1.ler(user01));
+		System.out.println("dump: " + a1.dump());
+		System.out.println("tamanho:" + a1.getTamanho());
 
+
+		a1.escrever(user01,"Novo conteúdo.");
+		System.out.println("lendo: " + a1.ler(user01));
+		System.out.println("dump: " + a1.dump());
+		System.out.println("tamanho:" + a1.getTamanho());
 //		EntradaOperavel b1 = new Arquivo("B1", LocalDate.now(), "UM ARQUIVO TAMANHO GRANDE");
 //		EntradaOperavel c1 = new Arquivo("C1", LocalDate.now(), "UM ARQUIVO TAMANHO MUITO MUITO GRANDE");
 //
@@ -60,7 +63,7 @@ public class App {
 	}
 	
 	
-	public static void main(String[] args) throws IllegalAccessException {
+	public static void main(String[] args) throws Exception {
 		App app = new App();
 		app.runQ1();
 	}

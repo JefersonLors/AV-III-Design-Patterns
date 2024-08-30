@@ -9,19 +9,20 @@ public enum TipoArquivo {
     HEXADECIMAL(2);
     private int codigoTipoArquivo;
 
-
    TipoArquivo(int codigoTipoArquivo){
        this.codigoTipoArquivo = codigoTipoArquivo;
    }
    public Conversor getConversor(int codigoTipoArquivo){
+       Conversor conversor = null;
        switch (codigoTipoArquivo) {
            case 1:
-               return new Conversor2Bin();
+               conversor = new Conversor2Bin();
+               break;
            case 2:
-               return new Conversor2Hex();
-           default:
-               return null;
+               conversor = new Conversor2Hex();
+               break;
        }
+       return conversor;
    }
    public int getCodigo(){
        return this.codigoTipoArquivo;
