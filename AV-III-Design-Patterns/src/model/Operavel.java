@@ -1,5 +1,7 @@
 package model;
 
+import javax.naming.OperationNotSupportedException;
+
 public interface Operavel {
 	
 	public String dump();

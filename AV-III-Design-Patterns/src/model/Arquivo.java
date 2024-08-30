@@ -4,14 +4,43 @@ import java.time.LocalDate;
 import java.util.List;
 
 import model.composite.AbstractEntrada;
+import model.originator.Originador;
+import model.resources.EstadoArquivo;
+import model.resources.TipoArquivo;
+import model.state.AbstractArquivoState;
+import model.strategy.Conversor;
 
-public class Arquivo extends AbstractEntrada implements EntradaOperavel{
-	
+import javax.naming.OperationNotSupportedException;
+
+public class Arquivo extends AbstractEntrada implements EntradaOperavelComEstado {
+	private Conversor conversor;
 	private String conteudo;
-
-	public Arquivo(String nome, LocalDate dataCriacao, String conteudo) {
+	private AbstractArquivoState estadoAtual;
+	public Arquivo(TipoArquivo tipoArquivo, String nome, LocalDate dataCriacao, String conteudo, EstadoArquivo estadoInicial){
 		super(nome, dataCriacao);
-		this.conteudo =  conteudo;
+		this.estadoAtual = estadoInicial.getArquivoState(estadoInicial.getCodigoEstado());
+		this.conversor = tipoArquivo.getConversor(tipoArquivo.getCodigo());
+		this.conteudo =  this.conversor.converte(conteudo);
+	}
+
+	@Override
+	public void bloquear() throws OperationNotSupportedException {
+		this.estadoAtual = this.estadoAtual.bloquear();
+	}
+
+	@Override
+	public void somenteLeitura() throws OperationNotSupportedException {
+		this.estadoAtual = this.estadoAtual.somenteLeitura();
+	}
+
+	@Override
+	public void excluir() throws OperationNotSupportedException {
+		this.estadoAtual = this.estadoAtual.excluir();
+	}
+
+	@Override
+	public void liberaOuRestaura() throws OperationNotSupportedException {
+		this.estadoAtual = this.estadoAtual.liberaOuRestaura();
 	}
 
 	@Override
@@ -31,17 +60,18 @@ public class Arquivo extends AbstractEntrada implements EntradaOperavel{
 
 	@Override
 	public Long getTamanho() throws IllegalAccessException{
-		return Long.valueOf(this.conteudo.length());
+		return this.estadoAtual.getTamanho(this.conteudo);
 	}
 	
 	@Override
 	public String ler(Credencial credencial) throws IllegalAccessException{
-		return this.conteudo;
+		var resultado = this.conversor.toASCII(this.conteudo);
+		return this.estadoAtual.ler(resultado);
 	}
 
 	@Override
 	public void escrever(Credencial credencial, String conteudo) throws IllegalAccessException {
-		this.conteudo = conteudo; 
+		this.conteudo = this.estadoAtual.escrever(this.conversor.converte(conteudo));
 	}
 
 	@Override
@@ -52,5 +82,4 @@ public class Arquivo extends AbstractEntrada implements EntradaOperavel{
 	protected void setConteudo(String conteudo) {
 		this.conteudo = conteudo;
 	}
-
 }
