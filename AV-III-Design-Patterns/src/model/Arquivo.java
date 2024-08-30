@@ -8,6 +8,7 @@ import model.originator.Originador;
 import model.resources.EstadoArquivo;
 import model.resources.TipoArquivo;
 import model.state.AbstractArquivoState;
+import model.state.ArquivoState;
 import model.strategy.Conversor;
 
 import javax.naming.OperationNotSupportedException;
@@ -75,7 +76,7 @@ public class Arquivo extends AbstractEntrada implements EntradaOperavelComEstado
 	}
 
 	@Override
-	public String dump(){
+	public String dump() throws IllegalAccessException{
 		return this.conteudo;
 	};
 
