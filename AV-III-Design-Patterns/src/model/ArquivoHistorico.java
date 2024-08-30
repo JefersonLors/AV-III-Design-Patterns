@@ -5,7 +5,7 @@ import model.resources.TipoArquivo;
 
 import java.time.LocalDate;
 
-public class ArquivoHistorico extends Arquivo implements EntradaOperavel{
+public class ArquivoHistorico extends Arquivo implements EntradaOperavelComEstado {
 
 
 	public ArquivoHistorico(TipoArquivo tipoArquivo, String nome, LocalDate dataCriacao, String conteudo, EstadoArquivo estadoInicial) {

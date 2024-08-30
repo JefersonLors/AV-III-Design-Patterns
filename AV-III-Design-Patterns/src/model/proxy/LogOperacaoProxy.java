@@ -8,9 +8,11 @@ import java.util.Map;
 import model.Arquivo;
 import model.Credencial;
 import model.Entrada;
-import model.EntradaOperavel;
+import model.EntradaOperavelComEstado;
 
-public class LogOperacaoProxy implements EntradaOperavel{
+import javax.naming.OperationNotSupportedException;
+
+public class LogOperacaoProxy implements EntradaOperavelComEstado {
 
 	private Arquivo arquivo;
 	private Map<Credencial, Integer> log;
@@ -73,6 +75,26 @@ public class LogOperacaoProxy implements EntradaOperavel{
 		Integer acessado = (this.log.get(credencial) == null) ? 0 : this.log.get(credencial);
 		acessado++;
 		this.log.put(credencial, acessado);
+	}
+
+	@Override
+	public void somenteLeitura() throws OperationNotSupportedException {
+		this.arquivo.somenteLeitura();
+	}
+
+	@Override
+	public void excluir() throws OperationNotSupportedException {
+		this.arquivo.excluir();
+	}
+
+	@Override
+	public void liberaOuRestaura() throws OperationNotSupportedException {
+		this.arquivo.liberaOuRestaura();
+	}
+
+	@Override
+	public void bloquear() throws OperationNotSupportedException {
+		this.arquivo.bloquear();
 	}
 
 	@Override

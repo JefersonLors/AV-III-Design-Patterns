@@ -2,10 +2,8 @@ import java.time.LocalDate;
 
 import model.Arquivo;
 import model.Credencial;
-import model.EntradaOperavel;
 import model.resources.EstadoArquivo;
 import model.resources.TipoArquivo;
-import model.state.AbstractArquivoState;
 
 public class App {
 	public void runQ1() throws Exception  {
@@ -16,16 +14,20 @@ public class App {
 		System.out.println("dump: " + a1.dump());
 		System.out.println("tamanho:" + a1.getTamanho());
 
-
 		a1.escrever(user01,"Novo conteúdo.");
 		System.out.println("lendo: " + a1.ler(user01));
 		System.out.println("dump: " + a1.dump());
 		System.out.println("tamanho:" + a1.getTamanho());
 
+		a1.somenteLeitura();
+		//a1.escrever(user01,"Era uma vez");
+		System.out.println("lendo: " + a1.ler(user01));
+		System.out.println("dump: " + a1.dump());
+		System.out.println("tamanho:" + a1.getTamanho());
 
 
-//		EntradaOperavel b1 = new Arquivo("B1", LocalDate.now(), "UM ARQUIVO TAMANHO GRANDE");
-//		EntradaOperavel c1 = new Arquivo("C1", LocalDate.now(), "UM ARQUIVO TAMANHO MUITO MUITO GRANDE");
+//		EntradaOperavelComEstado b1 = new Arquivo("B1", LocalDate.now(), "UM ARQUIVO TAMANHO GRANDE");
+//		EntradaOperavelComEstado c1 = new Arquivo("C1", LocalDate.now(), "UM ARQUIVO TAMANHO MUITO MUITO GRANDE");
 //
 //		Entrada a = new Pasta("A", LocalDate.now());
 //		Entrada b = new Pasta("B", LocalDate.now());

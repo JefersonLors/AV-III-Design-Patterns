@@ -11,7 +11,7 @@ import model.strategy.Conversor;
 
 import javax.naming.OperationNotSupportedException;
 
-public class Arquivo extends AbstractEntrada implements EntradaOperavel{
+public class Arquivo extends AbstractEntrada implements EntradaOperavelComEstado {
 	private Conversor conversor;
 	private String conteudo;
 	private AbstractArquivoState estadoAtual;
@@ -22,15 +22,22 @@ public class Arquivo extends AbstractEntrada implements EntradaOperavel{
 		this.conteudo =  this.conversor.converte(conteudo);
 	}
 
+	@Override
 	public void bloquear() throws OperationNotSupportedException {
 		this.estadoAtual = this.estadoAtual.bloquear();
 	}
+
+	@Override
 	public void somenteLeitura() throws OperationNotSupportedException {
 		this.estadoAtual = this.estadoAtual.somenteLeitura();
 	}
+
+	@Override
 	public void excluir() throws OperationNotSupportedException {
 		this.estadoAtual = this.estadoAtual.excluir();
 	}
+
+	@Override
 	public void liberaOuRestaura() throws OperationNotSupportedException {
 		this.estadoAtual = this.estadoAtual.liberaOuRestaura();
 	}
