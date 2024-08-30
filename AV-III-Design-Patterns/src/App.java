@@ -1,15 +1,15 @@
 import java.time.LocalDate;
 
-import model.Arquivo;
-import model.Credencial;
+import model.*;
+import model.caretaker.HistoricoCaretaker;
 import model.resources.EstadoArquivo;
 import model.resources.TipoArquivo;
 
 public class App {
 	public void runQ1() throws Exception  {
 		Credencial user01 = new Credencial("user01");
-		
-		Arquivo a1 = new Arquivo(TipoArquivo.BINARIO, "A1", LocalDate.now(), "Oi", EstadoArquivo.NORMAL);
+
+		ArquivoHistorico a1 = new ArquivoHistorico(TipoArquivo.BINARIO, "A1", LocalDate.now(), "Oi", EstadoArquivo.NORMAL);
 		System.out.println("lendo: " + a1.ler(user01));
 		System.out.println("dump: " + a1.dump());
 		System.out.println("tamanho:" + a1.getTamanho());
@@ -25,9 +25,31 @@ public class App {
 		System.out.println("dump: " + a1.dump());
 		System.out.println("tamanho:" + a1.getTamanho());
 
+		a1.liberaOuRestaura();
+		a1.escrever(user01,"Era uma vez");
+		System.out.println("lendo: " + a1.ler(user01));
+		System.out.println("dump: " + a1.dump());
+		System.out.println("tamanho:" + a1.getTamanho());
 
-//		EntradaOperavelComEstado b1 = new Arquivo("B1", LocalDate.now(), "UM ARQUIVO TAMANHO GRANDE");
-//		EntradaOperavelComEstado c1 = new Arquivo("C1", LocalDate.now(), "UM ARQUIVO TAMANHO MUITO MUITO GRANDE");
+
+		HistoricoCaretaker<ArquivoHistorico.Snapshot> historicoCaretaker = new HistoricoCaretaker<>(a1);
+		System.out.println("\nGera snapshot");
+		historicoCaretaker.geraSnapshot();
+
+		System.out.println("\nModifica valor");
+		a1.escrever(user01,"Testando 1, 2, 3");
+		System.out.println("lendo: " + a1.ler(user01));
+		System.out.println("dump: " + a1.dump());
+		System.out.println("tamanho:" + a1.getTamanho());
+
+		System.out.println("\nRecupera a snapshot");
+		historicoCaretaker.desfazer();
+		System.out.println("lendo: " + a1.ler(user01));
+		System.out.println("dump: " + a1.dump());
+		System.out.println("tamanho:" + a1.getTamanho());
+
+//		EntradaOperavelComEstado b1 = new Arquivo(TipoArquivo.BINARIO,"B1", LocalDate.now(), "UM ARQUIVO TAMANHO GRANDE", EstadoArquivo.NORMAL);
+//		EntradaOperavelComEstado c1 = new Arquivo(TipoArquivo.BINARIO,"C1", LocalDate.now(), "UM ARQUIVO TAMANHO MUITO MUITO GRANDE", EstadoArquivo.NORMAL);
 //
 //		Entrada a = new Pasta("A", LocalDate.now());
 //		Entrada b = new Pasta("B", LocalDate.now());

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import model.composite.AbstractEntrada;
+import model.originator.Originador;
 import model.resources.EstadoArquivo;
 import model.resources.TipoArquivo;
 import model.state.AbstractArquivoState;
@@ -79,6 +80,6 @@ public class Arquivo extends AbstractEntrada implements EntradaOperavelComEstado
 	};
 
 	protected void setConteudo(String conteudo) {
-		this.conteudo = this.conversor.converte(conteudo);
+		this.conteudo = conteudo;
 	}
 }
