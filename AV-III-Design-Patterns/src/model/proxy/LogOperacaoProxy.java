@@ -98,7 +98,7 @@ public class LogOperacaoProxy implements EntradaOperavelComEstado {
 	}
 
 	@Override
-	public String dump(){
+	public String dump() throws IllegalAccessException{
 		return this.arquivo.dump();
 	}
 
