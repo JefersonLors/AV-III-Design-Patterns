@@ -14,7 +14,7 @@ public class HistoricoCaretaker<M> {
         this.historico = new Stack<>();
     }
 
-    public void geraSnapshot(){
+    public void geraSnapshot() throws IllegalAccessException{
         this.historico.push(this.arquivo.checkpoint());
     }
 
