@@ -1,11 +1,13 @@
-package model;
+package model.concreteStrategy;
+
+import model.strategy.Conversor;
 
 import java.text.DecimalFormat;
 
-public class Conversor2Bin {
-	
+public class Conversor2Bin implements Conversor {
 	public static int BIN_BLOCK_SIZE = 8;
-	
+
+	@Override
 	public String toASCII(String binary) {
 		int iCont = 0;
 		StringBuffer conteudo = new StringBuffer();
@@ -19,7 +21,12 @@ public class Conversor2Bin {
 		return conteudo.toString();		
 	}
 
-	
+	@Override
+	public String converte(String string) {
+		return this.toBinary(string);
+	}
+
+
 	public String toBinary(String string) {
 		StringBuffer conteudo = new StringBuffer();		
 		for(int iCont = 0; iCont < string.length(); iCont++)

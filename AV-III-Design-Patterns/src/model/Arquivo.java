@@ -4,14 +4,21 @@ import java.time.LocalDate;
 import java.util.List;
 
 import model.composite.AbstractEntrada;
+import model.resources.TipoArquivo;
+import model.strategy.Conversor;
 
 public class Arquivo extends AbstractEntrada implements EntradaOperavel{
-	
+	private Conversor conversor;
 	private String conteudo;
 
-	public Arquivo(String nome, LocalDate dataCriacao, String conteudo) {
+	public Arquivo(TipoArquivo tipoArquivo, String nome, LocalDate dataCriacao, String conteudo) throws RuntimeException{
 		super(nome, dataCriacao);
-		this.conteudo =  conteudo;
+		this.conversor = tipoArquivo.getConversor(tipoArquivo.getCodigo());
+
+        if(conversor == null ){
+			throw new RuntimeException("Esse tipo de arquivo não existe.");
+		}
+		this.conteudo =  this.conversor.converte(conteudo);
 	}
 
 	@Override
@@ -36,7 +43,7 @@ public class Arquivo extends AbstractEntrada implements EntradaOperavel{
 	
 	@Override
 	public String ler(Credencial credencial) throws IllegalAccessException{
-		return this.conteudo;
+		return this.conversor.toASCII(this.conteudo);
 	}
 
 	@Override

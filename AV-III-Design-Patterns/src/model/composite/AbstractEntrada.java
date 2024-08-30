@@ -21,8 +21,6 @@ public class AbstractEntrada {
 	public LocalDate getDataCriacao() {
 		return dataCriacao;
 	}
-	
-
 
 	@Override
 	public int hashCode() {
@@ -40,10 +38,5 @@ public class AbstractEntrada {
 		AbstractEntrada other = (AbstractEntrada) obj;
 		return Objects.equals(nome, other.nome);
 	}
-	
-	
-
-	
-	
 }
 
