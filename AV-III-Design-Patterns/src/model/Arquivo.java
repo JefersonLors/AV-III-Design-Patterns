@@ -57,12 +57,13 @@ public class Arquivo extends AbstractEntrada implements EntradaOperavel{
 	
 	@Override
 	public String ler(Credencial credencial) throws IllegalAccessException{
-		return this.estadoAtual.ler(this.conversor.toASCII(this.conteudo));
+		var resultado = this.conversor.toASCII(this.conteudo);
+		return this.estadoAtual.ler(resultado);
 	}
 
 	@Override
 	public void escrever(Credencial credencial, String conteudo) throws IllegalAccessException {
-		this.conteudo = this.estadoAtual.escrever(this.conversor.converte(this.conteudo));
+		this.conteudo = this.estadoAtual.escrever(this.conversor.converte(conteudo));
 	}
 
 	@Override
