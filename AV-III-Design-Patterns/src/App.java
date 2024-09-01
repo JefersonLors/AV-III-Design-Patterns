@@ -4,6 +4,7 @@ import javax.naming.OperationNotSupportedException;
 
 import model.*;
 import model.caretaker.HistoricoCaretaker;
+import model.proxy.LogOperacaoProxy;
 import model.resources.EstadoArquivo;
 import model.resources.TipoArquivo;
 
@@ -564,7 +565,111 @@ public class App {
 			
 		}
 
-		private void ler(Arquivo a1, Credencial kid){
+        public void runTesteAll(){
+			Credencial tigresa = new Credencial("vip");
+			System.out.println("---------------------- TESTE DE ALL ----------------------");
+			ArquivoHistorico a4 = new ArquivoHistorico(
+				TipoArquivo.BINARIO, 
+				"Arquivo 4", LocalDate.now(), 
+				"Seja bem vindo arquivo 4", 
+				EstadoArquivo.NORMAL);
+
+			LogOperacaoProxy arquivoProtegido = new LogOperacaoProxy(a4);
+
+			ler(arquivoProtegido, tigresa);
+
+			HistoricoCaretaker<ArquivoHistorico.Snapshot> caretaker =  new HistoricoCaretaker<ArquivoHistorico.Snapshot>(a4);
+
+			geraSnapshot(caretaker);
+
+			log(arquivoProtegido);
+
+			escrever(arquivoProtegido, tigresa, "atualização de conteúdo");
+
+			ler(arquivoProtegido, tigresa);
+			
+			desfazer(caretaker);
+			
+			ler(arquivoProtegido, tigresa);
+
+			log(arquivoProtegido);
+
+			System.out.println("-------- ADICIONANDO ARQUIVO 4 A PASTA 1 --------");
+			Pasta p1 =  new Pasta("Pasta 1", LocalDate.now());
+			p1.addFilho(a4);
+
+			System.out.println("-------- TENTANDO ADICIONAR UM ARQUIVO NO OUTRO");
+			Arquivo a5 = new Arquivo(
+				TipoArquivo.BINARIO, 
+				"Arquivo 4", LocalDate.now(), 
+				"Seja bem vindo arquivo 4", 
+				EstadoArquivo.NORMAL);
+			try{
+			a4.addFilho(a5);
+			}catch(UnsupportedOperationException e){
+				System.err.println("0 -- NÃO É POSSÍVEL ADICIONAR UM ARQUIVO A OUTRO");
+			}
+
+			bloquear(arquivoProtegido);
+
+			ler(arquivoProtegido, tigresa);
+
+			escrever(arquivoProtegido, tigresa, "teste 1 de escrita");
+
+			tamanho(arquivoProtegido);
+
+			liberar(arquivoProtegido);
+
+			ler(arquivoProtegido, tigresa);
+
+			escrever(arquivoProtegido, tigresa, "teste 2 de escrita");
+
+			geraSnapshot(caretaker);
+
+			tamanho(arquivoProtegido);
+
+			somenteLeitura(arquivoProtegido);
+
+			ler(arquivoProtegido, tigresa);
+
+			escrever(arquivoProtegido, tigresa, "teste 3 de escrita");
+
+			tamanho(arquivoProtegido);
+
+			bloquear(arquivoProtegido);
+
+			liberar(arquivoProtegido);
+
+			escrever(arquivoProtegido, tigresa, "testee de escrita 4");
+
+			excluir(arquivoProtegido);
+
+			ler(arquivoProtegido, tigresa);
+
+			escrever(arquivoProtegido, tigresa, "teste 5 de escrita");
+
+			tamanho(arquivoProtegido);
+
+			restaurar(arquivoProtegido);
+
+			desfazer(caretaker);
+
+			dump(arquivoProtegido);
+			
+			log(arquivoProtegido);
+
+
+
+
+			
+		}
+
+		private void log(LogOperacaoProxy arquivoProtegido){
+			String log = arquivoProtegido.doLog();
+			System.out.println("1 -- " + log);
+		}
+
+		private void ler(EntradaOperavelComEstado a1, Credencial kid){
 			try {
 				String conteudo = a1.ler(kid);
 				System.out.println("1 -- LENDO: " + conteudo);
@@ -573,7 +678,7 @@ public class App {
 			}
 		}
 
-		private void dump(Arquivo a1){
+		private void dump(EntradaOperavelComEstado a1){
 			try {
 				String dump = a1.dump();
 				System.out.println("1 -- DUMP: " + dump);
@@ -582,7 +687,7 @@ public class App {
 			}
 		}
 
-		private void escrever(Arquivo a1, Credencial kid, String conteudo){
+		private void escrever(EntradaOperavelComEstado a1, Credencial kid, String conteudo){
 			try {
 				a1.escrever(kid, conteudo);
 				System.out.println("1 -- ESCREVENDO");
@@ -591,7 +696,7 @@ public class App {
 			};
 		}
 
-		private void tamanho(Arquivo a1){
+		private void tamanho(EntradaOperavelComEstado a1){
 			try {
 				Long tam = a1.getTamanho();
 				System.out.println("1 -- TAMANHO: " + tam); //observar o numero de carateres
@@ -600,43 +705,43 @@ public class App {
 			}
 		}
 
-		private void excluir(Arquivo a1){
+		private void excluir(EntradaOperavelComEstado a1){
 			try {
 				a1.excluir();
-				System.out.println("1 -- EXCUINDO ARQUIVO");
+				System.out.println("1 -- EXCUINDO EntradaOperavelComEstado");
 			} catch (OperationNotSupportedException e) {
-				System.out.println("0 -- EXCLUINDO ARQUIVO");
+				System.out.println("0 -- EXCLUINDO EntradaOperavelComEstado");
 			}
 		}
 
-		private void restaurar(Arquivo a1){
+		private void restaurar(EntradaOperavelComEstado a1){
 			try {
 				a1.liberaOuRestaura();
-				System.out.println("1 --ARQUIVO RESTAURADO");
+				System.out.println("1 --EntradaOperavelComEstado RESTAURADO");
 			} catch (OperationNotSupportedException e) {
-				System.out.println("0 -- FALHA AO RESTAURAR ARQUIVO");
+				System.out.println("0 -- FALHA AO RESTAURAR EntradaOperavelComEstado");
 			}
 		}
 
-		private void liberar(Arquivo a1){
+		private void liberar(EntradaOperavelComEstado a1){
 			try {
 				a1.liberaOuRestaura();
-				System.out.println("1 --ARQUIVO LIBERADO");
+				System.out.println("1 --EntradaOperavelComEstado LIBERADO");
 			} catch (OperationNotSupportedException e) {
-				System.out.println("0 -- FALHA AO LIBERAR ARQUIVO");
+				System.out.println("0 -- FALHA AO LIBERAR EntradaOperavelComEstado");
 			}
 		}
 
-		private void bloquear(Arquivo a1){
+		private void bloquear(EntradaOperavelComEstado a1){
 			try {
 				a1.bloquear();
-				System.out.println("1 -- ARQUIVO BLOQUEADO");
+				System.out.println("1 -- EntradaOperavelComEstado BLOQUEADO");
 			} catch (OperationNotSupportedException e) {
-				System.out.println("0 -- ERRO AO BLOQUEAR ARQUIVO");
+				System.out.println("0 -- ERRO AO BLOQUEAR EntradaOperavelComEstado");
 			}
 		}
 
-		private void somenteLeitura(Arquivo a1){
+		private void somenteLeitura(EntradaOperavelComEstado a1){
 			try {
 				a1.somenteLeitura();
 				System.out.println("1 -- SOMENTE LEITURA");
@@ -665,8 +770,9 @@ public class App {
 		App app = new App();
 		// app.runQ1();
 		Testes testes = app.new Testes();
-		testes.runTesteMaquinaEstado(); 
-		testes.runTesteMemento();
+		// testes.runTesteMaquinaEstado(); 
+		// testes.runTesteMemento();
+		testes.runTesteAll();
 	}
 
 }
