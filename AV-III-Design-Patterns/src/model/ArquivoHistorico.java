@@ -7,6 +7,11 @@ import model.resources.TipoArquivo;
 import java.time.LocalDate;
 
 //ORIGINATOR NO MEMENTO
+// //LEAF NO COMPOSITE
+// //CONTEXT NO STRATEGY
+// //CONTEXT NO STATE
+// //REAL SUBEJECT NO PROXY
+
 public class ArquivoHistorico extends Arquivo implements EntradaOperavelComEstado, Originador<ArquivoHistorico.Snapshot> {
 	public ArquivoHistorico(TipoArquivo tipoArquivo, String nome, LocalDate dataCriacao, String conteudo, EstadoArquivo estadoInicial) {
 		super(tipoArquivo, nome, dataCriacao, conteudo, estadoInicial);
