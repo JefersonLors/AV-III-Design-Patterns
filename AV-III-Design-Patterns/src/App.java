@@ -12,7 +12,7 @@ public class App {
 	public void runQ1() throws Exception  {
 		Credencial user01 = new Credencial("user01");
 
-		ArquivoHistorico a1 = new ArquivoHistorico(TipoArquivo.BINARIO, "A1", LocalDate.now(), "Oi", EstadoArquivo.NORMAL);
+		ArquivoHistorico a1 = new ArquivoHistorico(TipoArquivo.TEXTO, "A1", LocalDate.now(), "Oi", EstadoArquivo.NORMAL);
 		System.out.println("lendo: " + a1.ler(user01));
 		System.out.println("dump: " + a1.dump());
 		System.out.println("tamanho:" + a1.getTamanho());
