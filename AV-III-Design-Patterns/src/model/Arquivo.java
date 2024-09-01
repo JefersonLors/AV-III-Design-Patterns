@@ -4,15 +4,17 @@ import java.time.LocalDate;
 import java.util.List;
 
 import model.composite.AbstractEntrada;
-import model.originator.Originador;
 import model.resources.EstadoArquivo;
 import model.resources.TipoArquivo;
-import model.state.AbstractArquivoState;
 import model.state.ArquivoState;
 import model.strategy.Conversor;
 
 import javax.naming.OperationNotSupportedException;
 
+//LEAF NO COMPOSITE
+//CONTEXT NO STRATEGY
+//CONTEXT NO STATE
+//REAL SUBEJECT NO PROXY
 public class Arquivo extends AbstractEntrada implements EntradaOperavelComEstado {
 	private Conversor conversor;
 	private String conteudo;
@@ -82,5 +84,8 @@ public class Arquivo extends AbstractEntrada implements EntradaOperavelComEstado
 
 	protected void setConteudo(String conteudo) {
 		this.conteudo = conteudo;
+	}
+	protected String getConteudo(){
+		return this.conteudo;
 	}
 }

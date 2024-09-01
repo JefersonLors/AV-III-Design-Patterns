@@ -4,6 +4,7 @@ import model.originator.Originador;
 
 import java.util.Stack;
 
+//CARE TAKER NO MEMENTO
 public class HistoricoCaretaker<M> {
     private Originador<M> arquivo;
 

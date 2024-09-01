@@ -12,6 +12,7 @@ import model.EntradaOperavelComEstado;
 
 import javax.naming.OperationNotSupportedException;
 
+//PROXY NO PROXY
 public class LogOperacaoProxy implements EntradaOperavelComEstado {
 
 	private Arquivo arquivo;

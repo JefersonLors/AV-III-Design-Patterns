@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 
+//COMPONENT NO COMPOSITE
 public class AbstractEntrada {
 	private String nome;
 	private LocalDate dataCriacao;

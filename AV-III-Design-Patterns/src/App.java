@@ -39,18 +39,53 @@ public class App {
 		System.out.println("\nGera snapshot");
 		historicoCaretaker.geraSnapshot();
 
-		System.out.println("\nModifica valor");
+		System.out.println("\nModifica valor1");
 		a1.escrever(user01,"Testando 1, 2, 3");
+		System.out.println("\nGera snapshot");
+		historicoCaretaker.geraSnapshot();
 		System.out.println("lendo: " + a1.ler(user01));
 		System.out.println("dump: " + a1.dump());
 		System.out.println("tamanho:" + a1.getTamanho());
 
-		System.out.println("\nRecupera a snapshot");
+		System.out.println("\nModifica valor2");
+		a1.escrever(user01,"Testando 1, 2, 3, 4");
+		System.out.println("\nGera snapshot");
+		historicoCaretaker.geraSnapshot();
+		System.out.println("lendo: " + a1.ler(user01));
+		System.out.println("dump: " + a1.dump());
+		System.out.println("tamanho:" + a1.getTamanho());
+
+		System.out.println("\nModifica valor3");
+		a1.escrever(user01,"Testando 1, 2, 3, 4, 5");
+		System.out.println("\nGera snapshot");
+		historicoCaretaker.geraSnapshot();
+		System.out.println("lendo: " + a1.ler(user01));
+		System.out.println("dump: " + a1.dump());
+		System.out.println("tamanho:" + a1.getTamanho());
+
+		System.out.println("\nModifica valor3");
+		a1.escrever(user01,"Testando 1, 2, 3, 4, 5, 6");
+		System.out.println("lendo: " + a1.ler(user01));
+		System.out.println("dump: " + a1.dump());
+		System.out.println("tamanho:" + a1.getTamanho());
+
+		System.out.println("\nRecupera a snapshot 1");
 		historicoCaretaker.desfazer();
 		System.out.println("lendo: " + a1.ler(user01));
 		System.out.println("dump: " + a1.dump());
 		System.out.println("tamanho:" + a1.getTamanho());
 
+		System.out.println("\nRecupera a snapshot 2");
+		historicoCaretaker.desfazer();
+		System.out.println("lendo: " + a1.ler(user01));
+		System.out.println("dump: " + a1.dump());
+		System.out.println("tamanho:" + a1.getTamanho());
+
+		System.out.println("\nRecupera a snapshot 3");
+		historicoCaretaker.desfazer();
+		System.out.println("lendo: " + a1.ler(user01));
+		System.out.println("dump: " + a1.dump());
+		System.out.println("tamanho:" + a1.getTamanho());
 //		EntradaOperavelComEstado b1 = new Arquivo(TipoArquivo.BINARIO,"B1", LocalDate.now(), "UM ARQUIVO TAMANHO GRANDE", EstadoArquivo.NORMAL);
 //		EntradaOperavelComEstado c1 = new Arquivo(TipoArquivo.BINARIO,"C1", LocalDate.now(), "UM ARQUIVO TAMANHO MUITO MUITO GRANDE", EstadoArquivo.NORMAL);
 //
@@ -768,11 +803,11 @@ public class App {
 	
 	public static void main(String[] args) throws Exception {
 		App app = new App();
-		// app.runQ1();
-		Testes testes = app.new Testes();
+		 app.runQ1();
+		// Testes testes = app.new Testes();
 		// testes.runTesteMaquinaEstado(); 
 		// testes.runTesteMemento();
-		testes.runTesteAll();
+		// testes.runTesteAll();
 	}
 
 }

@@ -4,6 +4,7 @@ import model.strategy.Conversor;
 
 import java.text.DecimalFormat;
 
+//CONCRETE STRATEGY NO STRATEGY
 public class Conversor2Bin implements Conversor {
 	public static int BIN_BLOCK_SIZE = 8;
 

@@ -1,7 +1,6 @@
 package model.resources;
 
 import model.concreteStrategy.Conversor2Bin;
-import model.concreteStrategy.Conversor2Hex;
 import model.strategy.Conversor;
 
 public enum TipoArquivo {
@@ -17,9 +16,6 @@ public enum TipoArquivo {
        switch (codigoTipoArquivo) {
            case 1:
                conversor = new Conversor2Bin();
-               break;
-           case 2:
-               conversor = new Conversor2Hex();
                break;
        }
        return conversor;
