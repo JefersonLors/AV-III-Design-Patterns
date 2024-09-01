@@ -12,7 +12,7 @@ public class ArquivoHistorico extends Arquivo implements EntradaOperavelComEstad
 	}
 
 	@Override
-	public Snapshot checkpoint() {
+	public Snapshot checkpoint() throws IllegalAccessException{
 		return new Snapshot(this.dump());
 	}
 

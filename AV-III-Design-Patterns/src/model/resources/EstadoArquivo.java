@@ -5,6 +5,7 @@ import model.concreteState.Excluido;
 import model.concreteState.Normal;
 import model.concreteState.SomenteLeitura;
 import model.state.AbstractArquivoState;
+import model.state.ArquivoState;
 
 public enum EstadoArquivo {
     NORMAL(1),
@@ -21,7 +22,7 @@ public enum EstadoArquivo {
         return this.codigoEstado;
     }
 
-    public AbstractArquivoState getArquivoState(int codigoEstado){
+    public ArquivoState getArquivoState(int codigoEstado){
         AbstractArquivoState estado = null;
         switch (codigoEstado){
             case 1:

@@ -8,6 +8,7 @@ import model.originator.Originador;
 import model.resources.EstadoArquivo;
 import model.resources.TipoArquivo;
 import model.state.AbstractArquivoState;
+import model.state.ArquivoState;
 import model.strategy.Conversor;
 
 import javax.naming.OperationNotSupportedException;
@@ -15,7 +16,7 @@ import javax.naming.OperationNotSupportedException;
 public class Arquivo extends AbstractEntrada implements EntradaOperavelComEstado {
 	private Conversor conversor;
 	private String conteudo;
-	private AbstractArquivoState estadoAtual;
+	private ArquivoState estadoAtual;
 	public Arquivo(TipoArquivo tipoArquivo, String nome, LocalDate dataCriacao, String conteudo, EstadoArquivo estadoInicial){
 		super(nome, dataCriacao);
 		this.estadoAtual = estadoInicial.getArquivoState(estadoInicial.getCodigoEstado());
@@ -75,7 +76,7 @@ public class Arquivo extends AbstractEntrada implements EntradaOperavelComEstado
 	}
 
 	@Override
-	public String dump(){
+	public String dump() throws IllegalAccessException{
 		return this.conteudo;
 	};
 

@@ -2,7 +2,7 @@ package model.state;
 
 import javax.naming.OperationNotSupportedException;
 
-public abstract class AbstractArquivoState {
+public abstract class AbstractArquivoState implements ArquivoState {
     public Long getTamanho(String conteudo) throws IllegalAccessException{
         throw new IllegalAccessException();
     }
