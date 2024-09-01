@@ -5,6 +5,7 @@ import javax.naming.OperationNotSupportedException;
 import model.*;
 import model.caretaker.HistoricoCaretaker;
 import model.proxy.LogOperacaoProxy;
+import model.proxy.LogOperacaoProxyHistorico;
 import model.resources.EstadoArquivo;
 import model.resources.TipoArquivo;
 
@@ -609,11 +610,11 @@ public class App {
 				"Seja bem vindo arquivo 4", 
 				EstadoArquivo.NORMAL);
 
-			LogOperacaoProxy arquivoProtegido = new LogOperacaoProxy(a4);
+			LogOperacaoProxyHistorico arquivoProtegido = new LogOperacaoProxyHistorico(a4);
 
 			ler(arquivoProtegido, tigresa);
 
-			HistoricoCaretaker<ArquivoHistorico.Snapshot> caretaker =  new HistoricoCaretaker<ArquivoHistorico.Snapshot>(a4);
+			HistoricoCaretaker<ArquivoHistorico.Snapshot> caretaker =  new HistoricoCaretaker<ArquivoHistorico.Snapshot>(arquivoProtegido);
 
 			geraSnapshot(caretaker);
 
@@ -631,7 +632,11 @@ public class App {
 
 			System.out.println("-------- ADICIONANDO ARQUIVO 4 A PASTA 1 --------");
 			Pasta p1 =  new Pasta("Pasta 1", LocalDate.now());
-			p1.addFilho(a4);
+			p1.addFilho(arquivoProtegido);
+			System.out.println("-------- EXIBINDO CONTEÚDO DA PASTA 1 --------");
+			for (Entrada f : p1.getFilhos()) {
+				System.out.println("1 -- O NOME DO FILHO DA PASTA 1 É: " + f.getNome());;
+			}
 
 			System.out.println("-------- TENTANDO ADICIONAR UM ARQUIVO NO OUTRO");
 			Arquivo a5 = new Arquivo(
@@ -689,6 +694,8 @@ public class App {
 
 			desfazer(caretaker);
 
+			ler(arquivoProtegido, tigresa);
+
 			dump(arquivoProtegido);
 			
 			log(arquivoProtegido);
@@ -699,7 +706,7 @@ public class App {
 			
 		}
 
-		private void log(LogOperacaoProxy arquivoProtegido){
+		private void log(LogOperacaoProxyHistorico arquivoProtegido){
 			String log = arquivoProtegido.doLog();
 			System.out.println("1 -- " + log);
 		}
@@ -803,11 +810,11 @@ public class App {
 	
 	public static void main(String[] args) throws Exception {
 		App app = new App();
-		 app.runQ1();
-		// Testes testes = app.new Testes();
+		//  app.runQ1();
+		Testes testes = app.new Testes();
 		// testes.runTesteMaquinaEstado(); 
 		// testes.runTesteMemento();
-		// testes.runTesteAll();
+		testes.runTesteAll();
 	}
 
 }
