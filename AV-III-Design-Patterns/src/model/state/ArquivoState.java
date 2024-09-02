@@ -2,6 +2,7 @@ package model.state;
 
 import javax.naming.OperationNotSupportedException;
 
+//INTERFACE STATE NO STATE
 public interface ArquivoState {
     public Long getTamanho(String conteudo) throws IllegalAccessException;
 

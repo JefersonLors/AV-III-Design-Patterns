@@ -5,14 +5,39 @@ import javax.naming.OperationNotSupportedException;
 import model.*;
 import model.caretaker.HistoricoCaretaker;
 import model.proxy.LogOperacaoProxy;
+import model.proxy.LogOperacaoProxyHistorico;
 import model.resources.EstadoArquivo;
 import model.resources.TipoArquivo;
 
 public class App {
+	/*
+	* 		OBSEVAÇÕES
+	*
+	* 1 - Identificamos que ainda que o arquivo esteja excluído a operação de dump, implementada conforme
+	* o documento, a realização dessa operação trazendo o conteúdo mais recente do arquivo, embora a
+	* operação getTamanho() retornar 0.
+	*
+	* 2 - Identificamos que conseguimos reverter a versão do conteúdo de arquivo histórico, com o memento,
+	* mesmo que estado dele seja não seja NORMAL. Contudo, conforme documento, que não especifica quais
+	* comportamentos a aplicação deve ter nessa situação, decidimos aplicar nenhuma solução.
+	*
+	* 3 - Identificamos que, conforme o segundo parágrafo do documento "o projeto deve contemplar
+	* mecanismos de log para garantir o registro de acesso (leitura, escrita e *dump*)", isto é, a operação
+	* dump, teoricamente, necessitaria de  log, todavia, conforme a pré definção das assinaturas do
+	* métodos supracitados, a operação dump não recebe credencial o que implica impossibilidade de
+	* registrar o seu log de acesso. Decidimos respeitar a definição do arquivo e não modificar a
+	* implementação.
+	*
+	* Possíveis soluções: poderíamos, para os casos 1 e 2, implementar uma verificação de estado dentro
+	* dos métodos sensíveis a tal, dump() e restore(). No entanto, ainda assim não saberíamos como seria a
+	* restrição relacionada aos outros estados, como bloqueado, que não permite leitura, pois não consta esses
+	* cenários no documento, por isso, optamos por não implementar.
+	*
+	* */
 	public void runQ1() throws Exception  {
 		Credencial user01 = new Credencial("user01");
 
-		ArquivoHistorico a1 = new ArquivoHistorico(TipoArquivo.BINARIO, "A1", LocalDate.now(), "Oi", EstadoArquivo.NORMAL);
+		ArquivoHistorico a1 = new ArquivoHistorico(TipoArquivo.TEXTO, "A1", LocalDate.now(), "Oi", EstadoArquivo.NORMAL);
 		System.out.println("lendo: " + a1.ler(user01));
 		System.out.println("dump: " + a1.dump());
 		System.out.println("tamanho:" + a1.getTamanho());
@@ -39,18 +64,53 @@ public class App {
 		System.out.println("\nGera snapshot");
 		historicoCaretaker.geraSnapshot();
 
-		System.out.println("\nModifica valor");
+		System.out.println("\nModifica valor1");
 		a1.escrever(user01,"Testando 1, 2, 3");
+		System.out.println("\nGera snapshot");
+		historicoCaretaker.geraSnapshot();
 		System.out.println("lendo: " + a1.ler(user01));
 		System.out.println("dump: " + a1.dump());
 		System.out.println("tamanho:" + a1.getTamanho());
 
-		System.out.println("\nRecupera a snapshot");
+		System.out.println("\nModifica valor2");
+		a1.escrever(user01,"Testando 1, 2, 3, 4");
+		System.out.println("\nGera snapshot");
+		historicoCaretaker.geraSnapshot();
+		System.out.println("lendo: " + a1.ler(user01));
+		System.out.println("dump: " + a1.dump());
+		System.out.println("tamanho:" + a1.getTamanho());
+
+		System.out.println("\nModifica valor3");
+		a1.escrever(user01,"Testando 1, 2, 3, 4, 5");
+		System.out.println("\nGera snapshot");
+		historicoCaretaker.geraSnapshot();
+		System.out.println("lendo: " + a1.ler(user01));
+		System.out.println("dump: " + a1.dump());
+		System.out.println("tamanho:" + a1.getTamanho());
+
+		System.out.println("\nModifica valor3");
+		a1.escrever(user01,"Testando 1, 2, 3, 4, 5, 6");
+		System.out.println("lendo: " + a1.ler(user01));
+		System.out.println("dump: " + a1.dump());
+		System.out.println("tamanho:" + a1.getTamanho());
+
+		System.out.println("\nRecupera a snapshot 1");
 		historicoCaretaker.desfazer();
 		System.out.println("lendo: " + a1.ler(user01));
 		System.out.println("dump: " + a1.dump());
 		System.out.println("tamanho:" + a1.getTamanho());
 
+		System.out.println("\nRecupera a snapshot 2");
+		historicoCaretaker.desfazer();
+		System.out.println("lendo: " + a1.ler(user01));
+		System.out.println("dump: " + a1.dump());
+		System.out.println("tamanho:" + a1.getTamanho());
+
+		System.out.println("\nRecupera a snapshot 3");
+		historicoCaretaker.desfazer();
+		System.out.println("lendo: " + a1.ler(user01));
+		System.out.println("dump: " + a1.dump());
+		System.out.println("tamanho:" + a1.getTamanho());
 //		EntradaOperavelComEstado b1 = new Arquivo(TipoArquivo.BINARIO,"B1", LocalDate.now(), "UM ARQUIVO TAMANHO GRANDE", EstadoArquivo.NORMAL);
 //		EntradaOperavelComEstado c1 = new Arquivo(TipoArquivo.BINARIO,"C1", LocalDate.now(), "UM ARQUIVO TAMANHO MUITO MUITO GRANDE", EstadoArquivo.NORMAL);
 //
@@ -429,9 +489,6 @@ public class App {
 				//dump(a2);
 	
 				tamanho(a2);
-
-
-
 		}
 		
         public void runTesteMemento(){
@@ -574,11 +631,11 @@ public class App {
 				"Seja bem vindo arquivo 4", 
 				EstadoArquivo.NORMAL);
 
-			LogOperacaoProxy arquivoProtegido = new LogOperacaoProxy(a4);
+			LogOperacaoProxyHistorico arquivoProtegido = new LogOperacaoProxyHistorico(a4);
 
 			ler(arquivoProtegido, tigresa);
 
-			HistoricoCaretaker<ArquivoHistorico.Snapshot> caretaker =  new HistoricoCaretaker<ArquivoHistorico.Snapshot>(a4);
+			HistoricoCaretaker<ArquivoHistorico.Snapshot> caretaker =  new HistoricoCaretaker<ArquivoHistorico.Snapshot>(arquivoProtegido);
 
 			geraSnapshot(caretaker);
 
@@ -596,7 +653,11 @@ public class App {
 
 			System.out.println("-------- ADICIONANDO ARQUIVO 4 A PASTA 1 --------");
 			Pasta p1 =  new Pasta("Pasta 1", LocalDate.now());
-			p1.addFilho(a4);
+			p1.addFilho(arquivoProtegido);
+			System.out.println("-------- EXIBINDO CONTEÚDO DA PASTA 1 --------");
+			for (Entrada f : p1.getFilhos()) {
+				System.out.println("1 -- O NOME DO FILHO DA PASTA 1 É: " + f.getNome());;
+			}
 
 			System.out.println("-------- TENTANDO ADICIONAR UM ARQUIVO NO OUTRO");
 			Arquivo a5 = new Arquivo(
@@ -654,16 +715,86 @@ public class App {
 
 			desfazer(caretaker);
 
+			ler(arquivoProtegido, tigresa);
+
 			dump(arquivoProtegido);
 			
 			log(arquivoProtegido);
-
-
-
-
-			
 		}
 
+		public void testeCompositeState() throws IllegalAccessException {
+			Credencial tigresa = new Credencial("vip");
+			System.out.println("---------------------- Teste Composite State ----------------------");
+
+			Arquivo a1 = new Arquivo(
+					TipoArquivo.TEXTO,
+					"Arquivo normal 1", LocalDate.now(),
+					"Seja bem vindo arquivo normal 1",
+					EstadoArquivo.NORMAL);
+
+			Arquivo a2 = new Arquivo(
+					TipoArquivo.BINARIO,
+					"Arquivo 2", LocalDate.now(),
+					"Seja bem vindo arquivo normal 2",
+					EstadoArquivo.BLOQUEADO);
+
+			ArquivoHistorico aH1 = new ArquivoHistorico(
+					TipoArquivo.TEXTO,
+					"Arquivo histórico 1", LocalDate.now(),
+					"Seja bem vindo arquivo histórico 1",
+					EstadoArquivo.NORMAL);
+
+			ArquivoHistorico aH2 = new ArquivoHistorico(
+					TipoArquivo.TEXTO,
+					"Arquivo Historico 2", LocalDate.now(),
+					"Seja bem vindo arquivo histórico 2",
+					EstadoArquivo.NORMAL);
+
+			LogOperacaoProxy proxyNormal1 = new LogOperacaoProxy(a2);
+
+			Pasta p1 = new Pasta("Pasta 1", LocalDate.now());
+			p1.addFilho(a1);
+			p1.addFilho(proxyNormal1);
+			p1.addFilho(aH1);
+			p1.addFilho(aH2);
+
+			var hCAH1 = new HistoricoCaretaker<ArquivoHistorico.Snapshot>(aH1);
+			var hCAH2 = new HistoricoCaretaker<ArquivoHistorico.Snapshot>(aH2);
+			geraSnapshot(hCAH1);
+			geraSnapshot(hCAH2);
+
+			System.out.println("\nFASE 1\n");
+			escrever( aH1, tigresa,"Escritas testes 9080");
+			excluir(aH1);
+			for(Entrada filho : p1.getFilhos()){
+				System.out.println("===========================================================\n");
+				EntradaOperavelComEstado f1 = (EntradaOperavelComEstado) filho;
+				ler(f1, tigresa);
+				escrever( f1, tigresa,"Escritas testes 1");
+				dump(f1);
+				ler(f1, tigresa);
+				tamanho(f1);
+			}
+
+			desfazer(hCAH1);
+			desfazer(hCAH2);
+
+			System.out.println("\nFASE 2\n");
+			for(Entrada filho : p1.getFilhos()){
+				System.out.println("===========================================================\n");
+				EntradaOperavelComEstado f1 = (EntradaOperavelComEstado) filho;
+				dump(f1);
+				ler(f1, tigresa);
+				tamanho(f1);
+			}
+
+			log(proxyNormal1);
+		}
+
+		private void log(LogOperacaoProxyHistorico arquivoProtegido){
+			String log = arquivoProtegido.doLog();
+			System.out.println("1 -- " + log);
+		}
 		private void log(LogOperacaoProxy arquivoProtegido){
 			String log = arquivoProtegido.doLog();
 			System.out.println("1 -- " + log);
@@ -768,11 +899,12 @@ public class App {
 	
 	public static void main(String[] args) throws Exception {
 		App app = new App();
-		// app.runQ1();
+		//  app.runQ1();
 		Testes testes = app.new Testes();
-		// testes.runTesteMaquinaEstado(); 
+		//testes.runTesteMaquinaEstado();
 		// testes.runTesteMemento();
-		testes.runTesteAll();
+		// testes.runTesteAll();
+		testes.testeCompositeState();
 	}
 
 }

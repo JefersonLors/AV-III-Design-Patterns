@@ -5,6 +5,7 @@ import model.state.ArquivoState;
 
 import javax.naming.OperationNotSupportedException;
 
+//CONCRETE STATE NO STATE
 public class Excluido extends AbstractArquivoState implements ArquivoState{
     @Override
     public Long getTamanho(String conteudo) throws IllegalAccessException {

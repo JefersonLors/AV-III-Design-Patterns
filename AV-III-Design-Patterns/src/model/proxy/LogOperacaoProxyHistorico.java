@@ -5,25 +5,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import model.Arquivo;
+import javax.naming.OperationNotSupportedException;
+
+import model.ArquivoHistorico;
+import model.ArquivoHistorico.Snapshot;
 import model.Credencial;
 import model.Entrada;
 import model.EntradaOperavelComEstado;
-
-import javax.naming.OperationNotSupportedException;
-
+import model.originator.Originador;
 //PROXY NO PROXY
-public class LogOperacaoProxy implements EntradaOperavelComEstado {
+public class LogOperacaoProxyHistorico implements EntradaOperavelComEstado, Originador<ArquivoHistorico.Snapshot> {
 
-	private Arquivo arquivo;
+    private ArquivoHistorico arquivo;
 	private Map<Credencial, Integer> log;
-	
-	public LogOperacaoProxy(Arquivo arquivo) {
+
+    public LogOperacaoProxyHistorico(ArquivoHistorico arquivo) {
 		this.arquivo = arquivo;
 		this.log = new HashMap<Credencial, Integer>();
 	}
-	
-	@Override
+
+    @Override
 	public String getNome() {
 		return this.arquivo.getNome();
 	}
@@ -103,4 +104,14 @@ public class LogOperacaoProxy implements EntradaOperavelComEstado {
 		return this.arquivo.dump();
 	}
 
+    @Override
+    public ArquivoHistorico.Snapshot checkpoint() {
+        return this.arquivo.checkpoint();
+    }
+
+    @Override
+    public void restore(Snapshot snapshot) {
+        this.arquivo.restore(snapshot);
+    }
+    
 }

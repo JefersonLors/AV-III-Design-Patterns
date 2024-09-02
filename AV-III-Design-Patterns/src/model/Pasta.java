@@ -6,8 +6,9 @@ import java.util.List;
 
 import model.composite.AbstractEntrada;
 
+//COMPOSITE NO COMPOSITE
 public class Pasta extends AbstractEntrada implements Entrada{
-	
+
 	private List<Entrada> filhos;
 	
 	public Pasta(String nome, LocalDate dataCriacao) {
@@ -34,7 +35,5 @@ public class Pasta extends AbstractEntrada implements Entrada{
 			tamanho += entrada.getTamanho();
 		return tamanho;
 	}
-	
-
 
 }
